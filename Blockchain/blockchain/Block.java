@@ -1,4 +1,4 @@
-package blockchain.Blockchain;
+package blockchain.blockchain;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Represents a block of a blockchain.
  */
-public class Block implements Serializable{
+public class Block implements Serializable {
     private final int id;
     private final long timestamp;
     private final String previousHash;
@@ -16,7 +16,7 @@ public class Block implements Serializable{
     private long genDuration;
     private final Pattern PATTERN;
     private final int minerId;
-    private final int zerosHash;
+    private int zerosHash;
     private Message[] data;
 
 
@@ -45,14 +45,19 @@ public class Block implements Serializable{
         long startTime = System.currentTimeMillis();
         do {
             magicNumber = generateMagicNumber();
-            hash = BlockChainUtil.applySha256(
-                    id + timestamp + previousHash + magicNumber + minerId + Arrays.toString(data)
+            hash = BlockchainUtil.applySha256(
+                    id +
+                            Long.toString(timestamp) +
+                            previousHash +
+                            magicNumber +
+                            minerId +
+                            Arrays.toString(data == null ? new Message[]{} : data)
             );
             if (zerosHash == 0) {
                 break;
             }
         } while (!hash.matches(PATTERN.pattern()));
-        this.genDuration = System.currentTimeMillis() - startTime;
+        this.genDuration = (System.currentTimeMillis() - startTime) / 100;
         return hash;
     }
 
@@ -109,8 +114,16 @@ public class Block implements Serializable{
         return System.currentTimeMillis();
     }
 
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
     public int getZerosHash() {
         return zerosHash;
+    }
+
+    public int getMagicNumber() {
+        return magicNumber;
     }
 
     /**
@@ -151,5 +164,10 @@ public class Block implements Serializable{
                         blockData.toString(),
                         this.genDuration
                 );
+    }
+
+
+    public Message[] getData() {
+        return data;
     }
 }
