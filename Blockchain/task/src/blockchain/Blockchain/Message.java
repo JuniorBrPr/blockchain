@@ -1,4 +1,4 @@
-package blockchain.blockchain;
+package blockchain.Blockchain;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -16,7 +16,7 @@ public class Message implements Serializable {
     //The constructor of Message class builds the list that will be written to the file.
     //The list consists of the message and the signature.
     public Message(String data, String keyFile) throws InvalidKeyException, Exception {
-        list = new ArrayList<>();
+        list = new ArrayList<byte[]>();
         list.add(data.getBytes());
         list.add(sign(data, keyFile));
     }
