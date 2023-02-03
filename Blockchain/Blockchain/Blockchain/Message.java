@@ -1,28 +1,12 @@
 package blockchain.Blockchain.Blockchain;
 
-public class Message {
-    private final String message;
-    private final int minerId;
+import java.io.Serializable;
 
-    public Message(String message, int minerId) {
-        this.message = message;
-        this.minerId = minerId;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public int getMinerId() {
-        return minerId;
-    }
+public record Message(String message, int minerId) implements Serializable {
 
     @Override
     public String toString() {
-        return "Message{" +
-                "message='" + message + '\'' +
-                ", minerId=" + minerId +
-                '}';
+        return "\tMessage {\n\t\tmessage=\n\t\t\t" + message +"\n\t\tminerId=\n\t\t\t" + minerId + "\n\t}";
     }
 }
 

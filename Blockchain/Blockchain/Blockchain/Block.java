@@ -74,22 +74,11 @@ public class Block implements Serializable, Comparable<Block> {
         return magicNumber;
     }
 
-    public Message[] getData() {
-        return data;
-    }
-
     /**
      * @return the hash of the block.
      */
     public String getHash() {
         return hash;
-    }
-
-    /**
-     * @return the hash of the previous block.
-     */
-    public String getPreviousHash() {
-        return previousHash;
     }
 
     protected void setData(Message[] data) {
@@ -120,10 +109,6 @@ public class Block implements Serializable, Comparable<Block> {
         return (int) (Math.random() * MAGIC_NUMBER_LENGTH);
     }
 
-    public int getZerosHash() {
-        return zerosHash;
-    }
-
     /**
      * @return a string representation of the block
      */
@@ -149,7 +134,7 @@ public class Block implements Serializable, Comparable<Block> {
                 Hash of the block:
                 %s
                 Block data: %s
-                Block was generating for %d seconds
+                Block was generating for %d milliseconds
                 """
                 .formatted(
                         this.minerId,
