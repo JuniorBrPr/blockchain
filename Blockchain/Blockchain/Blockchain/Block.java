@@ -1,13 +1,12 @@
-package blockchain.Blockchain;
+package blockchain.Blockchain.Blockchain;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
  * Represents a block of a blockchain.
  */
-public class Block implements Serializable{
+public class Block implements Serializable, Comparable<Block> {
     private final int id;
     private final long timestamp;
     private final String previousHash;
@@ -23,12 +22,12 @@ public class Block implements Serializable{
     /**
      * @param id           the id of the block.
      * @param previousHash the hash-value of the previous block.
-     * @param minerId
+     * @param minerId      the id of the miner.
      */
     public Block(int id, String previousHash, int zerosHash, int minerId) {
         this.id = id;
         this.minerId = minerId;
-        this.timestamp = setTimestamp();
+        this.timestamp = System.currentTimeMillis();
         this.previousHash = previousHash;
         this.zerosHash = zerosHash;
         this.PATTERN = Pattern.compile("^0{" + zerosHash + "}[a-zA-z1-9][a-zA-z0-9]*$");
@@ -45,8 +44,12 @@ public class Block implements Serializable{
         long startTime = System.currentTimeMillis();
         do {
             magicNumber = generateMagicNumber();
-            hash = BlockChainUtil.applySha256(
-                    id + timestamp + previousHash + magicNumber + minerId + Arrays.toString(data)
+            hash = BlockchainUtil.applySha256(
+                    id +
+                            timestamp +
+                            previousHash +
+                            magicNumber +
+                            minerId
             );
             if (zerosHash == 0) {
                 break;
@@ -61,6 +64,18 @@ public class Block implements Serializable{
      */
     public int getId() {
         return id;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public int getMagicNumber() {
+        return magicNumber;
+    }
+
+    public Message[] getData() {
+        return data;
     }
 
     /**
@@ -103,10 +118,6 @@ public class Block implements Serializable{
     private int generateMagicNumber() {
         int MAGIC_NUMBER_LENGTH = 100000000;
         return (int) (Math.random() * MAGIC_NUMBER_LENGTH);
-    }
-
-    private Long setTimestamp() {
-        return System.currentTimeMillis();
     }
 
     public int getZerosHash() {
@@ -152,4 +163,10 @@ public class Block implements Serializable{
                         this.genDuration
                 );
     }
+
+    @Override
+    public int compareTo(Block block) {
+        return this.id - block.id;
+    }
 }
+

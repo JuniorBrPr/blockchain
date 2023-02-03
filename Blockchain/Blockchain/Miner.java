@@ -1,23 +1,23 @@
-package blockchain;
+package blockchain.Blockchain;
 
-import blockchain.Blockchain.Block;
-import blockchain.Blockchain.Blockchain;
+import blockchain.Blockchain.Blockchain.Block;
+import blockchain.Blockchain.Blockchain.Blockchain;
 
 public class Miner implements Runnable {
     private final int id;
     private final Blockchain blockchain;
-    private int virtualCoins;
+//    private int virtualCoins;
 
     public Miner(int id, Blockchain blockchain) {
         this.id = id;
         this.blockchain = blockchain;
-        this.virtualCoins = 100;
+//        this.virtualCoins = 100;
     }
 
     @Override
     public void run() {
-        while (blockchain.getBlocks().length < 15) {
-            if (blockchain.getBlocks().length == 15) {
+        while (blockchain.getBlocks().size() < 15) {
+            if (blockchain.getBlocks().size() == 15) {
                 break;
             }
             if (blockchain.getLastBlock() != null) {
@@ -27,14 +27,15 @@ public class Miner implements Runnable {
                         lastBlock.getHash(),
                         blockchain.getZerosHash(),
                         id);
-                if (blockchain.getLastBlock() == lastBlock && blockchain.getBlocks().length < 15) {
+                if (blockchain.getLastBlock() == lastBlock && blockchain.getBlocks().size() < 15) {
                     blockchain.addBlock(block);
-                    virtualCoins += 100;
-                    try {
-                        blockchain.addData("Miner " + id ," found block " + block.getId() + " with hash " + block.getHash()," VC's: " + virtualCoins);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+//                    virtualCoins += 100;
+//                    try {
+//                        blockchain.addData(""),
+//                                this.id);
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
 //                        System.out.println("Miner " + id + " added block " + block.getId() + " to the blockchain");
                 }
             }
