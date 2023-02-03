@@ -1,4 +1,4 @@
-package blockchain.Blockchain;
+package blockchain.Blockchain.Blockchain;
 
 import java.io.*;
 

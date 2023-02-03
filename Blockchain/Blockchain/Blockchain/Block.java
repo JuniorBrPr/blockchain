@@ -1,13 +1,12 @@
-package blockchain.Blockchain;
+package blockchain.Blockchain.Blockchain;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
  * Represents a block of a blockchain.
  */
-public class Block implements Serializable{
+public class Block implements Serializable, Comparable<Block> {
     private final int id;
     private final long timestamp;
     private final String previousHash;
@@ -23,12 +22,12 @@ public class Block implements Serializable{
     /**
      * @param id           the id of the block.
      * @param previousHash the hash-value of the previous block.
-     * @param minerId
+     * @param minerId      the id of the miner.
      */
     public Block(int id, String previousHash, int zerosHash, int minerId) {
         this.id = id;
         this.minerId = minerId;
-        this.timestamp = setTimestamp();
+        this.timestamp = System.currentTimeMillis();
         this.previousHash = previousHash;
         this.zerosHash = zerosHash;
         this.PATTERN = Pattern.compile("^0{" + zerosHash + "}[a-zA-z1-9][a-zA-z0-9]*$");
@@ -45,8 +44,12 @@ public class Block implements Serializable{
         long startTime = System.currentTimeMillis();
         do {
             magicNumber = generateMagicNumber();
-            hash = BlockChainUtil.applySha256(
-                    id + timestamp + previousHash + magicNumber + minerId + Arrays.toString(data)
+            hash = BlockchainUtil.applySha256(
+                    id +
+                            timestamp +
+                            previousHash +
+                            magicNumber +
+                            minerId
             );
             if (zerosHash == 0) {
                 break;
@@ -63,18 +66,19 @@ public class Block implements Serializable{
         return id;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public int getMagicNumber() {
+        return magicNumber;
+    }
+
     /**
      * @return the hash of the block.
      */
     public String getHash() {
         return hash;
-    }
-
-    /**
-     * @return the hash of the previous block.
-     */
-    public String getPreviousHash() {
-        return previousHash;
     }
 
     protected void setData(Message[] data) {
@@ -105,14 +109,6 @@ public class Block implements Serializable{
         return (int) (Math.random() * MAGIC_NUMBER_LENGTH);
     }
 
-    private Long setTimestamp() {
-        return System.currentTimeMillis();
-    }
-
-    public int getZerosHash() {
-        return zerosHash;
-    }
-
     /**
      * @return a string representation of the block
      */
@@ -138,7 +134,7 @@ public class Block implements Serializable{
                 Hash of the block:
                 %s
                 Block data: %s
-                Block was generating for %d seconds
+                Block was generating for %d milliseconds
                 """
                 .formatted(
                         this.minerId,
@@ -152,4 +148,10 @@ public class Block implements Serializable{
                         this.genDuration
                 );
     }
+
+    @Override
+    public int compareTo(Block block) {
+        return this.id - block.id;
+    }
 }
+
